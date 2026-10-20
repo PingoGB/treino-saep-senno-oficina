@@ -32,7 +32,7 @@ idCliente INT not null
 foreign key idCliente references cliente (id)
 );
 
-insert into carro (modelo, placa, ano) VALUES
+insert into carro (modelo, placa, ano, idCliente) VALUES
 ('Civic', 'ABC1234', 2007, 1),
 ('Uno', 'ABC1235', 2008, 2),
 ('Mobi', 'ABC1236', 2009, 3);
