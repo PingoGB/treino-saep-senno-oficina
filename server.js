@@ -1,6 +1,7 @@
 import express from 'express'
 import pool from './db.js'
 import cors from 'cors'
+import bcrypt from 'bcryptjs'
 
 const app = express()
 app.use (express.json())
@@ -8,26 +9,35 @@ app.use (cors())
 app.use (express.static('public'))
 const PORT = 3000
 
+app.post('/sign', async (req, res) =>{
+    const {nome, email, senha} = req.body;
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(senha, salt)
+    const sign = await pool.query("INSERT INTO usuario (nome, email, senha) VALUES ($1, $2, $3) RETURNING *", [nome, email, hashedPassword])
+    res.status(201).json(sign.rows[0])
+})
+
 app.post('/login', async (req, res) =>{
     const {email, senha} = req.body;
 
     const login = await pool.query("SELECT * FROM usuario WHERE email = $1", [email])
 
     if (login.rows.length === 0){
-        res.status(400).json({erro: "credenciais inválidas"})
+        return res.status(400).json({erro: "credenciais inválidas"})
     }
 
     const colaborador = login.rows[0]
 
     if (colaborador.email !== email){
-        res.status(400).json({erro: "credenciais inválidas"})
+        return res.status(400).json({erro: "credenciais inválidas"})
     }
 
-    if (colaborador.senha !== senha){
-        res.status(400).json({erro: "credenciais inválidas"})
+    const isPasswordValid = await bcrypt.compare(senha, colaborador.senha)
+    if (!isPasswordValid){
+        return res.status(400).json({erro: "credenciais inválidas"})
     }
 
-    res.status(200).json({
+    return res.status(200).json({
         mensagem: "login realizado",
         user:{
             "nome": colaborador.nome
@@ -40,15 +50,22 @@ app.get('/usuario', async (req, res) =>{
     return res.status(200).json(getColaborador.rows)
 })
 
-app.post ('cliente', async (req, res) =>{
+app.post ('/cliente', async (req, res) =>{
     const {nome, email, cpf} = req.body;
+    const salt = await bcrypt.genSalt(10);
+    const hashedCpf = await bcrypt.hash(cpf, salt)
 
-    const postCliente = await pool.query("INSERT INTO cliente (nome, email, senha) VALUES ($1, $2, $3)", [nome, email, cpf])
-    res.status.json(postCliente.rows[0])
+    const postCliente = await pool.query("INSERT INTO cliente (nome, email, cpf) VALUES ($1, $2, $3) RETURNING *", [nome, email, hashedCpf])
+    res.status(201).json(postCliente.rows[0])
 })
 
 app.get('/cliente', async (req, res) =>{
     const getCliente = await pool.query("SELECT * FROM cliente")
+    res.status(200).json(getCliente.rows)
+})
+
+app.get('/cliente/:id', async (req, res) =>{
+    const getCliente = await pool.query("SELECT * FROM cliente WHERE id = $1", [req.params.id])
     res.status(200).json(getCliente.rows)
 })
 
