@@ -113,20 +113,32 @@ app.delete('/carro/:id', async (req, res) =>{
 })
 
 app.post('/agendamento', async (req, res) =>{
-    const {id_cliente, id_carro, servico, data_agendamento} = req.body;
+    const {id_carro, servico, data_agendamento} = req.body;
 
-    const postAgendamento = await pool.query('INSERT INTO agendamento (id_cliente, id_carro, servico, data_agendamento) VALUES ($1, $2, $3, $4)', [id_cliente, id_carro, servico, data_agendamento])
+    const postAgendamento = await pool.query('INSERT INTO agendamento (id_carro, servico, data_agendamento) VALUES ($1, $2, $3) RETURNING *', [id_carro, servico, data_agendamento])
     res.status(200).json(postAgendamento.rows[0])
 })
 
 app.get('/agendamento', async (req, res) =>{
-    const ordenar = await pool.query("SELECT agendamento.*, cliente.*, carro.* FROM agendamento JOIN cliente ON agendamento.id_cliente = cliente.id JOIN carro ON agendamento.id_carro = carro.id ORDER BY agendamento.data_agendamento ASC")
+    const ordenar = await pool.query(` SELECT
+            agendamento.id,
+            TO_CHAR(agendamento.data_agendamento, 'YYYY-MM-DD') AS data_agendamento,
+            agendamento.servico,
+            agendamento.id_carro,
+            carro.idCliente,
+            cliente.nome AS cliente,
+            carro.placa,
+            carro.modelo
+        FROM agendamento
+        JOIN carro ON carro.id = agendamento.id_carro
+        JOIN cliente ON cliente.id = carro.idCliente
+        ORDER BY agendamento.data_agendamento`)
     res.status(201).json(ordenar.rows)
 })
 
 app.put('/agendamento/:id', async (req,res) =>{
-    const {id_cliente, id_carro, servico, data_agendamento} = req.body
-    const putAgendamento = await pool.query("UPDATE agendamento SET id_cliente = $1, id_carro = $2, servico = $3, data_agendamento = $4 WHERE id = $5 RETURNING *", [id_cliente, id_carro, servico, data_agendamento, req.params.id])
+    const {id_carro, servico, data_agendamento} = req.body
+    const putAgendamento = await pool.query("UPDATE agendamento SET id_carro = $1, servico = $2, data_agendamento = $3 WHERE id = $4 RETURNING *", [id_carro, servico, data_agendamento, req.params.id])
     res.status(200).json(putAgendamento.rows[0])
 })
 

@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
   <meta charset="utf-8">
-  <title>Agendamentos</title>
+  <title>Veículos</title>
   <link rel="stylesheet" href="css/estilo.css">
 </head>
 <body>
@@ -14,24 +14,25 @@
     <span><a href="login.html">Sair</a></span>
   </nav>
   <main>
-    <h2>Agendamentos</h2>
+    <h2>Veículos</h2>
 
     <form id="formulario">
       <input type="hidden" id="idDoRegistro">
-      <input type="date" id="data_agendamento" required>
-      <input id="servico" placeholder="Serviço" required>
-      <select id="id_veiculo" required></select>
+      <input id="modelo" placeholder="Modelo" required>
+      <input id="placa" placeholder="Placa" required>
+      <input id="ano" type="number" placeholder="Ano" required>
+      <select id="id_cliente" required></select>
       <button>Salvar</button>
     </form>
 
     <table>
       <thead>
-        <tr><th>Data</th><th>Serviço</th><th>Cliente</th><th>Placa</th><th>Modelo</th><th>Ações</th></tr>
+        <tr><th>Modelo</th><th>Placa</th><th>Ano</th><th>Cliente</th><th>Ações</th></tr>
       </thead>
       <tbody id="tabela"></tbody>
     </table>
   </main>
   <script src="js/funcoes.js"></script>
-  <script src="js/agendamentos.js"></script>
+  <script src="js/veiculos.js"></script>
 </body>
 </html>
