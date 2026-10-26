@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <title>Clientes</title>
+  <link rel="stylesheet" href="css/estilo.css">
+</head>
+<body>
+  <nav>
+    <a href="index.html">Início</a>
+    <a href="clientes.html">Clientes</a>
+    <a href="veiculos.html">Veículos</a>
+    <a href="agendamentos.html">Agendamentos</a>
+    <span><a href="login.html">Sair</a></span>
+  </nav>
+  <main>
+    <h2>Clientes</h2>
+
+    <form id="formulario">
+      <input type="hidden" id="idDoRegistro">
+      <input id="nome" placeholder="Nome" required>
+      <input id="cpf" placeholder="CPF" required>
+      <input id="telefone" placeholder="Telefone" required>
+      <button>Salvar</button>
+    </form>
+
+    <table>
+      <thead>
+        <tr><th>Nome</th><th>CPF</th><th>Telefone</th><th>Ações</th></tr>
+      </thead>
+      <tbody id="tabela"></tbody>
+    </table>
+  </main>
+  <script src="js/funcoes.js"></script>
+  <script src="js/clientes.js"></script>
+</body>
+</html>

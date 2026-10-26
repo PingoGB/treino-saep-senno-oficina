@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <title>Agendamentos</title>
+  <link rel="stylesheet" href="css/estilo.css">
+</head>
+<body>
+  <nav>
+    <a href="index.html">Início</a>
+    <a href="clientes.html">Clientes</a>
+    <a href="veiculos.html">Veículos</a>
+    <a href="agendamentos.html">Agendamentos</a>
+    <span><a href="login.html">Sair</a></span>
+  </nav>
+  <main>
+    <h2>Agendamentos</h2>
+
+    <form id="formulario">
+      <input type="hidden" id="idDoRegistro">
+      <input type="date" id="data_agendamento" required>
+      <input id="servico" placeholder="Serviço" required>
+      <select id="id_veiculo" required></select>
+      <button>Salvar</button>
+    </form>
+
+    <table>
+      <thead>
+        <tr><th>Data</th><th>Serviço</th><th>Cliente</th><th>Placa</th><th>Modelo</th><th>Ações</th></tr>
+      </thead>
+      <tbody id="tabela"></tbody>
+    </table>
+  </main>
+  <script src="js/funcoes.js"></script>
+  <script src="js/agendamentos.js"></script>
+</body>
+</html>

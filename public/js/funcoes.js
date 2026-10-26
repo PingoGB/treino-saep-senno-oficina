@@ -4,5 +4,11 @@ async function chamarServidor (endereco, metodo = 'GET', dados) {
     headers: { 'Content-Type' : 'application/json' },
     body: dados ? JSON.stringify(dados) : undefined,
     });
-    return resposta.status.json()
+    return resposta.json()
+}
+
+const mensagemDeBoasVindas = document.getElementById('mensagemDeBoasVindas');
+if (mensagemDeBoasVindas) {
+  const nome = new URLSearchParams(location.search).get('nome');
+  if (nome) mensagemDeBoasVindas.textContent = 'Bem-vindo, ' + nome + '!';
 }
