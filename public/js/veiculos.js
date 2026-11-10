@@ -12,7 +12,7 @@ async function carregarVeiculos() {
       <td>${carro.modelo}</td>
       <td>${carro.placa}</td>
       <td>${carro.ano}</td>
-      <td>${carro.idCliente}</td>
+      <td>${carro.cliente}</td>
       <td>
         <button onclick="preencherFormularioDeVeiculo(${carro.id})">Editar</button>
         <button onclick="excluirVeiculo(${carro.id})">Excluir</button>

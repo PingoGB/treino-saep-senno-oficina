@@ -147,7 +147,6 @@ app.delete('/cliente/:id', async (req,res) =>{
 app.post('/carro', async (req,res) =>{
     try {
         const {modelo, placa, ano, idCliente} = req.body;
-
         const postCarro = await pool.query("INSERT INTO carro (modelo, placa, ano, idCliente) VALUES ($1, $2, $3, $4) RETURNING *", [modelo, placa, ano, idCliente])
         return res.status(200).json(postCarro.rows[0])
     } catch (error) {
@@ -156,15 +155,26 @@ app.post('/carro', async (req,res) =>{
     }
 })
 
-app.get('/carro', async (req,res) =>{
+app.get('/carro', async (req, res) => {
     try {
-        const getCarro = await pool.query("SELECT * FROM carro")
+        const getCarro = await pool.query(`
+            SELECT 
+                carro.id,
+                carro.modelo,
+                carro.placa,
+                carro.ano,
+                carro.idCliente,
+                cliente.nome AS cliente
+            FROM carro
+            JOIN cliente ON cliente.id = carro.idCliente
+        `)
         return res.status(200).json(getCarro.rows)
     } catch (error) {
         console.error(error)
         return res.status(500).json({ erro: "Erro interno no servidor" })
     }
 })
+
 
 app.put('/carro/:id', async (req,res) =>{
     try {
